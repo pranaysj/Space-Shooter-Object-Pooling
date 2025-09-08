@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.Tracing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -32,11 +33,18 @@ namespace CosmicCuration.Bullets
             return CreateNewPooledBullet();
         }
 
+        public void ReturnBullet(BulletController returnBullet)
+        {
+            PooledBullet pooledBullet = pooledBullets.Find(b => b.bullet.Equals(returnBullet));
+            pooledBullet.InUsed = false;
+        }
+
         private BulletController CreateNewPooledBullet()
         {
             PooledBullet pooledBullet = new PooledBullet();
             pooledBullet.bullet = new BulletController(bulletView, bulletScriptableObject);
             pooledBullet.InUsed = true;
+            pooledBullets.Add(pooledBullet);
             return pooledBullet.bullet;
         }
 
