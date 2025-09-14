@@ -9,13 +9,13 @@ namespace CosmicCuration.Utilities
 {
     public class GenericObjectPool<T> where T : class
     {
-        private List<PooledItem<T>> pooledItem = new List<PooledItem<T>>();
+        private List<PooledItem<T>> pooledItems = new List<PooledItem<T>>();
         
         public T GetItem()
         {
-            if(pooledItem.Count > 0)
+            if(pooledItems.Count > 0)
             {
-                PooledItem<T> item = pooledItem.Find(i => !i.isUsed);
+                PooledItem<T> item = pooledItems.Find(i => !i.isUsed);
 
                 if(item != null)
                 {
@@ -33,13 +33,19 @@ namespace CosmicCuration.Utilities
 
             newItem.Item = CreateItem();
             newItem.isUsed = true;
-            pooledItem.Add(newItem);
+            pooledItems.Add(newItem);
             return newItem.Item;
         }
 
         protected virtual T CreateItem()
         {
             throw new NotImplementedException("CreateItem not implemented");
+        }
+
+        protected void ReturnItem(T item)
+        {
+            PooledItem<T> pooleditem = pooledItems.Find(i => i.Item.Equals(item));
+            pooleditem.isUsed = false;
         }
 
         public class PooledItem<T>
