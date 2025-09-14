@@ -42,7 +42,7 @@ namespace CosmicCuration.Utilities
             throw new NotImplementedException("CreateItem not implemented");
         }
 
-        protected void ReturnItem(T item)
+        public void ReturnItem(T item)
         {
             PooledItem<T> pooleditem = pooledItems.Find(i => i.Item.Equals(item));
             pooleditem.isUsed = false;
